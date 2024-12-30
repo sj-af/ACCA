@@ -3,128 +3,179 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ACCA Study Site</title>
+  
     <style>
         body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-}
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
 
-header {
-    background-color: #333;
-    color: #fff;
-    padding: 20px;
-    text-align: center;
-}
+        .chat-container {
+            width: 100%;
+            max-width: 400px;
+            height: 600px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            margin: 40px auto;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
 
-header nav ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: space-between;
-}
+        .chat-header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            border-bottom: 1px solid #333;
+            text-align: center;
+        }
 
-header nav ul li {
-    margin-right: 20px;
-}
+        .chat-messages {
+            padding: 20px;
+            overflow-y: auto;
+            height: 400px;
+            word-wrap: break-word;
+        }
 
-header nav a {
-    color: #fff;
-    text-decoration: none;
-}
+        .message {
+            margin-bottom: 10px;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
 
-main {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-}
+        .message .username {
+            font-weight: bold;
+        }
 
-.hero {
-    background-image: linear-gradient(to bottom, #333, #555);
-    color: #fff;
-    padding: 20px;
-    text-align: center;
-    margin-bottom: 20px;
-}
+        .chat-input {
+            padding: 10px;
+            border-top: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+        }
 
-.hero img {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-    border-radius: 10px;
-}
+        .chat-input textarea {
+            width: 70%;
+            height: 30px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            overflow-y: auto;
+            resize: none;
+        }
 
-.study-materials, .practice-questions {
-    margin-bottom: 20px;
-}
+        .chat-input button[type="submit"] {
+            width: 20%;
+            height: 30px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
 
-.study-materials ul, .practice-questions ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
+        .chat-input button[type="submit"]:hover {
+            background-color: #444;
+        }
 
-.study-materials li, .practice-questions li {
-    margin-bottom: 10px;
-}
+        /* Responsive design */
+        @media screen and (max-width: 600px) {
+            .chat-container {
+                width: 90%;
+                height: 100%;
+            }
 
-.study-materials a, .practice-questions a {
-    text-decoration: none;
-    color: #333;
-}
+            .chat-input textarea {
+                width: 60%;
+                height: 40px;
+            }
 
-footer {
-    background-color: #333;
-    color: #fff;
-    padding: 10px;
-    text-align: center;
-    clear: both;
-}
+            .chat-input button[type="submit"] {
+                width: 35%;
+            }
+        }
     </style>
-    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header>
-        <nav>
-            <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="#">Study Materials</a></li>
-                <li><a href="#">Practice Questions</a></li>
-                <li><a href="#">Community Forum</a></li>
-            </ul>
-        </nav>
-    </header>
-    <main>
-        <section class="hero">
-            <h1>ACCA Study Site</h1>
-            <p>Welcome to our ACCA study site, where you can find all the resources you need to pass your ACCA exams.</p>
-            <a href="{%url 'login'%}"> <button>Get Started</button></a>
-           
-        </section>
-        <section class="study-materials">
-            <h2>Study Materials</h2>
-            <ul>
-                <li>ACCA F1 - Accountant in Business</li>
-                <li>ACCA F2 - Management Accounting</li>
-                <li>ACCA F3 - Financial Accounting</li>
-            </ul>
-        </section>
-        <section class="practice-questions">
-            <h2>Practice Questions</h2>
-            <ul>
-                <li>ACCA F1 - Practice Questions</li>
-                <li>ACCA F2 - Practice Questions</li>
-                <center><li><a href="{%url 'register'%}">Start Your Journey</a></li></center>
-                <center><li><a href="https://www.accaglobal.com/us/en/student/your-study-options/studyhub.html" style="color:rgb(31, 4, 93);">Start Your Journey</a></li></center>
-            </ul>
-            
-        </section>
-    </main>
-    <footer>
-        <p>&copy; 2024 ACCA Study Site</p>
-    </footer>
+    <div class="chat-container">
+        <div class="chat-header">
+            Chat
+        </div>
+
+        <div class="chat-messages" id="chat-messages">
+            <!-- Messages will be displayed here -->
+            {% for i in texts1 %}
+               {%if i.user == id %}
+                    <p style="text-align: start;">{{ i.text }}</p>
+               {%else%}
+                    <p style="text-align: end;">{{ i.text }}</p>
+               {%endif%}
+            {% endfor %}
+        </div>
+
+        <div class="chat-input">
+            <form id="message-form" method="post" onsubmit="sendMessage(event)">
+                {% csrf_token %}
+                <textarea name="text" id="message-text" placeholder="Type a message..."></textarea>
+                <button type="submit">Send</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // DOM elements
+        const chatMessagesDiv = document.getElementById('chat-messages');
+        const messageForm = document.getElementById('message-form');
+        const messageInput = document.getElementById('message-text');
+
+        // Function to scroll to the bottom of the chat container
+        function scrollToBottom() {
+            chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight;
+        }
+
+        // Fetch and display new messages
+        function fetchMessages() {
+            fetch('{% url "text" %}')
+                .then(response => response.json())
+                .then(data => {
+                    const messagesHtml = data.texts1.map(message => {
+                        return `<p style="text-align: ${message.user === '{{ id }}' ? 'start' : 'end'};">${message.text}</p>`;
+                    }).join('');
+                    chatMessagesDiv.innerHTML = messagesHtml;
+                    scrollToBottom();
+                })
+                .catch(error => console.error('Error fetching messages:', error));
+        }
+
+        // Send message via AJAX (no page reload)
+        function sendMessage(event) {
+            event.preventDefault();
+            const messageText = messageInput.value.trim();
+            if (messageText) {
+                fetch('{% url "text" %}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: `text=${messageText}`
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        fetchMessages();  // Refresh the message list
+                        messageInput.value = '';  // Clear the input
+                    })
+                    .catch(error => console.error('Error sending message:', error));
+            }
+        }
+
+        // Automatically fetch new messages every 1 second
+        setInterval(fetchMessages, 1000);
+
+        // Initial message fetch
+        fetchMessages();
+    </script>
 </body>
 </html>
