@@ -118,26 +118,47 @@ scrollToBottom();
 
 
 
-const chatLogDiv = document.getElementById('chat-log');
-const messageForm = document.getElementById('message-form');
+let typingTimeout;
 
-// Function to fetch new messages from the server
-function fetchMessages() {
-    fetch('{% url "text" %}')
-        .then(response => response.json())
-        .then(data => {
-            const messagesHtml = data.texts1.map(message => {
-                return `<p style="text-align: ${message.user === '{{ id }}' ? 'start' : 'end'};">${message.text}</p>`;
-            }).join('');
-            chatLogDiv.innerHTML = messagesHtml;
+// Function to send typing status
+function sendTypingStatus(isTyping) {
+    clearTimeout(typingTimeout);
+
+    if (isTyping) {
+        fetch('{% url "typing_status" %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: 'typing=true'  // Send typing status as true
         })
-        .catch(error => console.error('Error fetching messages:', error));
+        .then(response => response.json())
+        .catch(error => console.error('Error sending typing status:', error));
+    } else {
+        typingTimeout = setTimeout(() => {
+            fetch('{% url "typing_status" %}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: 'typing=false'  // Send typing status as false when the user stops typing
+            })
+            .catch(error => console.error('Error stopping typing status:', error));
+        }, 2000);  // Stop typing after 2 seconds of inactivity
+    }
 }
 
-// Function to send a new message to the server
+// Detect when the user is typing and send typing status
+document.getElementById('message-text').addEventListener('input', function() {
+    sendTypingStatus(true);  // Send typing status as true when typing starts
+});
+
+// Message sending
 function sendMessage(event) {
     event.preventDefault();
-    const messageText = messageForm.querySelector('textarea').value.trim();
+    const messageText = document.getElementById('message-text').value.trim();
     if (messageText) {
         fetch('{% url "text" %}', {
             method: 'POST',
@@ -145,22 +166,41 @@ function sendMessage(event) {
                 'Content-Type': 'application/x-www-form-urlencoded',
                 'X-CSRFToken': '{{ csrf_token }}'
             },
-            body: `text=${messageText}`
+            body: 'text=' + messageText
         })
-            .then(response => response.json())
-            .then(data => {
-                fetchMessages();
-                messageForm.querySelector('textarea').value = '';
-            })
-            .catch(error => console.error('Error sending message:', error));
+        .then(response => response.json())
+        .then(data => {
+            // Fetch messages after sending
+            fetchMessages();
+            document.getElementById('message-text').value = '';  // Clear input field
+            sendTypingStatus(false);  // Stop typing status after sending a message
+        })
+        .catch(error => console.error('Error sending message:', error));
     }
 }
 
-// Set up event listeners
-messageForm.addEventListener('submit', sendMessage);
-setInterval(fetchMessages, 1000); // Fetch new messages every 1 second
+// Fetch messages from the server
+function fetchMessages() {
+    fetch('{% url "text" %}')
+        .then(response => response.json())
+        .then(data => {
+            const messagesHtml = data.texts1.map(message => {
+                return `<p style="text-align: ${message.user === '{{ id }}' ? 'start' : 'end'};">${message.text}</p>`;
+            }).join('');
+            document.getElementById('chat-messages').innerHTML = messagesHtml;
+            scrollToBottom();  // Scroll to bottom of chat
+        })
+        .catch(error => console.error('Error fetching messages:', error));
+}
 
-// Initial fetch of messages
-fetchMessages();
+// Scroll to bottom of the chat container
+function scrollToBottom() {
+    const chatMessagesDiv = document.getElementById('chat-messages');
+    chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight;
+}
+
+// Automatically fetch new messages every second
+setInterval(fetchMessages, 1000);
+
 </script>
 </html>
