@@ -46,5 +46,16 @@ def clear(request):
     return redirect('home')
 
 
+def register(request):
+    if request.POST:
+        uname=request.POST['uname']
+        pword=request.POST['pword']
+        Login.objects.create(username=uname,password=pword)
+       
+  
+        
+    return render(request,'register.html')
+
+
 
 
