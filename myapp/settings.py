@@ -80,10 +80,10 @@ WSGI_APPLICATION = 'myapp.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.environ.get('defaultdb'),
-        'USER': os.environ.get('avnadmin'),
-        'PASSWORD':os.environ.get( 'AVNS_MsP4XBy2QX19PLv96n4'),
-        'HOST': os.environ.get('mysql-259d0fa0-pssoorajkbfc-fcd3.h.aivencloud.com'),
+        'NAME': os.environ.get('MYSQL_DB_NAME'),
+        'USER': os.environ.get('MYSQL_DB_USER'),
+        'PASSWORD':os.environ.get( 'MYSQL_DB_PASSWORD'),
+        'HOST': os.environ.get('MYSQL_DB_HOST'),
         'PORT': '12435 ',
     }
 }
