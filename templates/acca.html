@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ACCA Study Site</title>
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+}
+
+header nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+header nav ul li {
+    margin-right: 20px;
+}
+
+header nav a {
+    color: #fff;
+    text-decoration: none;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+.hero {
+    background-image: linear-gradient(to bottom, #333, #555);
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.hero img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.study-materials, .practice-questions {
+    margin-bottom: 20px;
+}
+
+.study-materials ul, .practice-questions ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.study-materials li, .practice-questions li {
+    margin-bottom: 10px;
+}
+
+.study-materials a, .practice-questions a {
+    text-decoration: none;
+    color: #333;
+}
+
+footer {
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+    clear: both;
+}
+    </style>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Study Materials</a></li>
+                <li><a href="#">Practice Questions</a></li>
+                <li><a href="#">Community Forum</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section class="hero">
+            <h1>ACCA Study Site</h1>
+            <p>Welcome to our ACCA study site, where you can find all the resources you need to pass your ACCA exams.</p>
+            <a href="{%url 'login'%}"> <button>Get Started</button></a>
+           
+        </section>
+        <section class="study-materials">
+            <h2>Study Materials</h2>
+            <ul>
+                <li>ACCA F1 - Accountant in Business</li>
+                <li>ACCA F2 - Management Accounting</li>
+                <li>ACCA F3 - Financial Accounting</li>
+            </ul>
+        </section>
+        <section class="practice-questions">
+            <h2>Practice Questions</h2>
+            <ul>
+                <li>ACCA F1 - Practice Questions</li>
+                <li>ACCA F2 - Practice Questions</li>
+                <li>ACCA F3 - Practice Questions</li>
+                <center><li><a href="https://www.accaglobal.com/us/en/student/your-study-options/studyhub.html" style="color:rgb(31, 4, 93);">Start Your Journey</a></li></center>
+            </ul>
+            
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 ACCA Study Site</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+
+        .chat-container {
+            width: 400px;
+            height: 600px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            margin: 40px auto;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .chat-header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            border-bottom: 1px solid #333;
+            text-align: center;
+        }
+
+        .chat-messages {
+            padding: 20px;
+            overflow-y: auto;
+            height: 400px;
+            word-wrap: break-word;
+        }
+
+        .message {
+            margin-bottom: 10px;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .message .username {
+            font-weight: bold;
+        }
+
+        .chat-input {
+            padding: 10px;
+            border-top: 1px solid #ddd;
+        }
+
+        .chat-input textarea {
+    width: 70%;
+    height: 30px; /* initial height */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    overflow-y: auto; /* add this */
+}
+
+.chat-input button[type="submit"] {
+    width: 20%;
+    height: 30px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.chat-input button[type="submit"]:hover {
+    background-color: #444;
+}
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+      
+        
+        <div class="chat-messages">
+            <!-- Messages will be displayed here -->
+            {% for i in texts1 %}
+               {%if i.user == id %}
+                    <p style="text-align: start;"> {{i.text}}</p>
+                    {%else%}
+                    <p style="text-align: end;"> {{i.text}}</p>
+                    {%endif%}
+             
+            {% endfor %}
+        </div>
+        <div class="chat-input">
+            <form method="post">
+                {% csrf_token %}
+                <textarea name="text" name="text" placeholder="Type a message..."></textarea>
+                <button type="submit" name="submit">Submit</button><br>
+              <br><br>
+              <button>  <a href="{%url 'clear'%}">clear</a> </button> 
+            </form>
+        </div>
+   
+    </div>
+</body>
+<script>
+const chatMessagesDiv = document.querySelector('.chat-messages');
+
+// Function to scroll to the bottom of the div
+function scrollToBottom() {
+    chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight;
+}
+
+// Call the function whenever the content of the div changes
+chatMessagesDiv.addEventListener('DOMSubtreeModified', scrollToBottom);
+
+// Also call the function once to initialize the scroll position
+scrollToBottom();
+
+
+
+const chatLogDiv = document.getElementById('chat-log');
+const messageForm = document.getElementById('message-form');
+
+// Function to fetch new messages from the server
+function fetchMessages() {
+    fetch('{% url "text" %}')
+        .then(response => response.json())
+        .then(data => {
+            const messagesHtml = data.texts1.map(message => {
+                return `<p style="text-align: ${message.user === '{{ id }}' ? 'start' : 'end'};">${message.text}</p>`;
+            }).join('');
+            chatLogDiv.innerHTML = messagesHtml;
+        })
+        .catch(error => console.error('Error fetching messages:', error));
+}
+
+// Function to send a new message to the server
+function sendMessage(event) {
+    event.preventDefault();
+    const messageText = messageForm.querySelector('textarea').value.trim();
+    if (messageText) {
+        fetch('{% url "text" %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: `text=${messageText}`
+        })
+            .then(response => response.json())
+            .then(data => {
+                fetchMessages();
+                messageForm.querySelector('textarea').value = '';
+            })
+            .catch(error => console.error('Error sending message:', error));
+    }
+}
+
+// Set up event listeners
+messageForm.addEventListener('submit', sendMessage);
+setInterval(fetchMessages, 1000); // Fetch new messages every 1 second
+
+// Initial fetch of messages
+fetchMessages();
+</script>
+</html>
