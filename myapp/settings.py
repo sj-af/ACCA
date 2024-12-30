@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import os
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,12 +22,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-a*m2-g!pdk)%j!(_m6=k9j@*!r_l85=wp6juebbac=wc3*c9gm'
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost').split(',')
+
 
 
 # Application definition
@@ -77,10 +80,10 @@ WSGI_APPLICATION = 'myapp.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'defaultdb',
-        'USER': 'avnadmin',
-        'PASSWORD': 'AVNS_MsP4XBy2QX19PLv96n4',
-        'HOST': 'mysql-259d0fa0-pssoorajkbfc-fcd3.h.aivencloud.com',
+        'NAME': os.environ.get('defaultdb'),
+        'USER': os.environ.get('avnadmin'),
+        'PASSWORD':os.environ.get( 'AVNS_MsP4XBy2QX19PLv96n4'),
+        'HOST': os.environ.get('mysql-259d0fa0-pssoorajkbfc-fcd3.h.aivencloud.com'),
         'PORT': '12435 ',
     }
 }
