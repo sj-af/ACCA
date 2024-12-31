@@ -29,7 +29,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         message = text_data_json['message']
 
         # Save the message in the Room model
-        room = room.objects.create(user=1, text=message)  # You can replace `user=1` with actual user logic
+        Room = room.objects.create(user=1, text=message)  # You can replace `user=1` with actual user logic
 
         # Send message to room group
         await self.channel_layer.group_send(
