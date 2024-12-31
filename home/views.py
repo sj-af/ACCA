@@ -24,7 +24,7 @@ def login(request):
     return render(request,'home.html')
         
 
-@login_required(login_url='login/')
+
 def text(request):
     pk = request.session.get('id')
     
