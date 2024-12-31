@@ -25,19 +25,8 @@ def login(request):
         
 
 
-def text(request):
-    pk = request.session.get('id')
-    
-    if request.method == 'POST':
-        text = request.POST.get('text')
-        if text:
-            room.objects.create(user=pk, text=text)
-    
-    texts1 = room.objects.all()
-    
-    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-        data = [{'user': message.user, 'text': message.text} for message in texts1]
-        return JsonResponse({'texts1': data})
+def chat_room(request):
+    return render(request, 'text.html')
 
 def clear(request):
     room.objects.all().delete()
