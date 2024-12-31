@@ -2,7 +2,7 @@
 
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
-from .models import room
+from .models import room as Room
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -27,9 +27,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
-
+        pk = request.session.get('id')
         # Save the message in the Room model
-        Room = room.objects.create(user=1, text=message)  # You can replace `user=1` with actual user logic
+        room = Room.objects.create(user=pk, text=message)  # You can replace `user=1` with actual user logic
 
         # Send message to room group
         await self.channel_layer.group_send(
