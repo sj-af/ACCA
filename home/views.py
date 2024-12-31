@@ -26,7 +26,14 @@ def login(request):
 
 
 def chat_room(request):
-    return render(request, 'text.html')
+    if request.POST:
+        id=request.session.get('id')
+        text=request.POST['text']
+        if text:
+            room.objects.create(user=id, text=text)
+    texts1 = room.objects.all()
+    
+    return render(request, 'text.html', {'texts1': texts1, 'id': id})
 
 def clear(request):
     room.objects.all().delete()
