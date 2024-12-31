@@ -45,13 +45,25 @@
 <body>
     <div class="chat-container">
         <div class="chat-messages" id="chat-messages">
+            {%for i in texts}
+            {%if i.user==id%}
+            <p>{{i.text}}</p>
+            {%else%}
+             <p>{{i.text}}</p>
+            {%endif%}
+            
+            {%endfor%}
             <!-- Messages will appear here -->
         </div>
+        <form method='post'>
         <div class="chat-input">
-            <textarea id="chat-input" placeholder="Type a message..."></textarea>
-            <button onclick="sendMessage()">Send</button>
+            <textarea id="chat-input" placeholder="Type a message..." name='text'></textarea>
+            <input type='submit' value='send'>
+    
         </div>
-        <a href="https://my-love-8dd85.web.app">us<3</a>
+        </form>
+        <a href="https://my-love-8dd85.web.app">click here</a>
+                <p>password : sj10@piyaforever<3</p>
     </div>
 
     <script>
