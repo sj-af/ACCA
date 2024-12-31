@@ -93,7 +93,7 @@
         <div class="chat-input">
             <form method="post">
                 {% csrf_token %}
-                <textarea name="text" name="text" placeholder="Type a message..."></textarea>
+                <textarea  name="text" placeholder="Type a message..."></textarea>
                 <button type="submit" name="submit">Submit</button><br>
               <br><br>
               <button>  <a href="{%url 'clear'%}">clear</a> </button> 
