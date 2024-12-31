@@ -19,7 +19,7 @@ def login(request):
         if s:
             request.session['id']=s[0].id
            
-            return redirect('text')
+            return redirect('chat_room')
         
     return render(request,'home.html')
         
