@@ -2,7 +2,7 @@ from django.shortcuts import render,redirect
 from .models import Login,room
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
-from django.http import JsonResponse
+
 
 
 # Create your views here.
@@ -23,7 +23,7 @@ def login(request):
     return render(request,'home.html')
         
 
-
+@login_required(login_url='login/')
 def text(request):
     pk = request.session.get('id')
     
